@@ -4,9 +4,9 @@ use ieee.std_logic_1164.all;
 entity ALUA is
 port( A, B: in std_logic_vector (3 downto 0);
       S: in std_logic;
-      R: out std_logic_vector (3 downto 0));
-      --//no se si poner Cout: out std_logic debido a que el diagrama no requiere en si una salida Cout//--
-end;
+      R: out std_logic_vector (3 downto 0);
+      Cout: out std_logic);
+end ALUA;
 
 architecture STRL of ALUA is
 component FA4
@@ -15,7 +15,13 @@ port( 	A, B: in std_logic_vector(3 downto 0);
 	S: out std_logic_vector(3 downto 0);
 	Cout: out std_logic);
 end component;
-
-
-//Aqui parece ser que ocupamos una XOR de 4 bits o.O//
-
+BEGIN
+	PROCESS(S)
+	BEGIN
+		IF(S='0') THEN
+			U1: FA4 PORT MAP (A, B, S, R, Cout);
+		ELSE
+			U1: FA4 PORT MAP (A, (NOT B), S, R, Cout);
+		END IF;
+	END PROCESS;
+END STRL;
